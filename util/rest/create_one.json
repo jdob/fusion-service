@@ -1,0 +1,36 @@
+{
+    "name": "P1",
+    "summary": "S1",
+    "created": "2018-01-29T15:32:04.914876Z",
+    "links": "l.com,i.com",
+    "contacts": [
+        {
+            "id": 1,
+            "name": "C1",
+            "email": "E1@example.com",
+            "role": "R1"
+        },
+        {
+            "id": 2,
+            "name": "C2",
+            "email": "E2@example.com",
+            "role": "R2"
+        }
+    ],
+    "engagements": [
+        {
+            "id": 1,
+            "notes": "N1",
+            "location": "L1",
+            "timestamp": "2018-01-29T15:32:04.922823Z",
+            "attendees": "A1,B1"
+        },
+        {
+            "id": 2,
+            "notes": "N2",
+            "location": "L2",
+            "timestamp": "2018-01-29T15:32:04.924312Z",
+            "attendees": "A2,B2"
+        }
+    ]
+}
