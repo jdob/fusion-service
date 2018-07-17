@@ -1,7 +1,6 @@
 # Developer Installation
 
 * Python 3 and pip are required.
-* Change to the ``service`` directory.
 * Install the project dependencies:
 
 ``pip -r requirements.txt``
