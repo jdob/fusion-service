@@ -15,6 +15,8 @@ Including another URLconf
 """
 
 from django.conf.urls import url, include
+from django.contrib import admin
+from django.urls import path
 from rest_framework import routers
 
 from fusion.service.views import (CategoryViewSet, PartnerViewSet)
@@ -39,4 +41,5 @@ urlpatterns = [
     url(r'^partners/(?P<pk>[^/.]+)/engagements/(?P<engagement_id>[^/.]+)/$', engagements_view),
     url(r'^partners/(?P<pk>[^/.]+)/comments/(?P<comment_id>[^/.]+)/$', comments_view),
     url(r'^partners/(?P<pk>[^/.]+)/contacts/(?P<contact_id>[^/.]+)/$', contacts_view),
+    path('admin/', admin.site.urls),
 ]
