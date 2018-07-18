@@ -19,6 +19,9 @@ class Category(models.Model):
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __str__(self):
         return self.name
 
@@ -27,6 +30,9 @@ class PartnerCategory(models.Model):
 
     partner = models.ForeignKey(Partner, related_name='categories', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'partner_categories'
 
     def category_id(self):
         return self.category.id
