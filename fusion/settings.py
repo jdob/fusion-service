@@ -87,11 +87,38 @@ WSGI_APPLICATION = 'fusion.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+SQLITE = {'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': os.path.join(BASE_DIR, 'db.sqlite3')}
+
+if 'MYSQL_DATABASE' in os.environ:
+    name = os.environ['MYSQL_DATABASE']
+    username = os.environ.get('MYSQL_USERNAME', 'unknown')
+    password = os.environ.get('MYSQL_PASSWORD', 'unknown')
+    host = os.environ.get('MYSQL_HOST', 'localhost')
+    port = os.environ.get('MYSQL_PORT', 3306)
+
+    database = {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': name,
+        'USER': username,
+        'PASSWORD': password,
+        'HOST': host,
+        'PORT': port,
     }
+
+    print('Configuring MySQL:')
+    print('  Database: %s' % name)
+    print('  Username: %s' % username)
+    print('  Host: %s' % host)
+    print('  Port: %s' % port)
+
+else:
+    database = SQLITE
+    print('Configuring sqlite')
+
+
+DATABASES = {
+    'default': database
 }
 
 
