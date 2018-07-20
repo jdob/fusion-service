@@ -4,7 +4,7 @@ import django
 django.setup()
 
 
-from fusion.service.models import (Engagement, Category, Contact, Partner, Comment, PartnerCategory)
+from fusion.service.models import (Engagement, Category, Contact, Link, Partner, Comment, PartnerCategory)
 
 
 def _purge(cls):
@@ -19,6 +19,7 @@ def delete_all():
     _purge(Engagement)
     _purge(Contact)
     _purge(Comment)
+    _purge(Link)
     _purge(PartnerCategory)
 
     print('Completed!')

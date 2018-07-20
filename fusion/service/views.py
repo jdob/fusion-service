@@ -1,7 +1,8 @@
 from rest_framework import (decorators, response, viewsets)
 
-from .models import (Engagement, Partner, Comment, Category, Contact)
-from .serializers import (EngagementSerializer, PartnerSerializer, CommentSerializer, CategorySerializer, ContactSerializer)
+from .models import (Engagement, Partner, Comment, Category, Contact, Link)
+from .serializers import (EngagementSerializer, PartnerSerializer, CommentSerializer,
+                          CategorySerializer, ContactSerializer, LinkSerializer)
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -40,7 +41,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
         e = Engagement.objects.get(pk=engagement_id)
         for key,value in request.data['changes'].items():
             setattr(e, key, value)
-            e.save()
+        e.save()
         return response.Response(EngagementSerializer(e).data)
 
     @decorators.detail_route(methods=['get', 'post', 'delete', 'patch'], url_path='comments')
@@ -74,7 +75,6 @@ class PartnerViewSet(viewsets.ModelViewSet):
         Comment.objects.filter(id=comment_id).update(text=request.data['text'])
         return response.Response({})
 
-    #CRUD for contacts    
     @decorators.detail_route(methods=['get', 'post', 'delete', 'patch'], url_path='contacts')
     def contacts(self, request, pk=None, contact_id=None):
 
@@ -107,8 +107,42 @@ class PartnerViewSet(viewsets.ModelViewSet):
         c = Contact.objects.get(pk=contact_id)
         for key,value in request.data['changes'].items():
             setattr(c, key, value)
-            c.save()
+        c.save()
         return response.Response({})
+
+    @decorators.detail_route(methods=['get', 'post', 'delete', 'patch'], url_path='links')
+    def links(self, request, pk=None, link_id=None):
+        if self.request.method == 'GET':
+            return self._get_links()
+        elif self.request.method == 'POST':
+            return self._create_link(request)
+        elif self.request.method == 'DELETE':
+            return self._delete_link(request, link_id)
+        elif self.request.method == 'PATCH':
+            return self._update_link(request, link_id)
+
+    def _get_links(self):
+        links = Link.objects.filter(partner=self.get_object())
+        l = LinkSerializer(links, many=True)
+        return response.Response(l.data)
+
+    def _create_link(self, request):
+        l = LinkSerializer()
+        request.data['partner'] = self.get_object()
+        e = l.create(request.data)
+        return response.Response(l.to_representation(e))
+
+    def _delete_link(self, request, link_id):
+        Link.objects.filter(id=link_id).delete()
+        return response.Response({})
+
+    def _update_link(self, request, link_id):
+        l = Link.objects.get(pk=link_id)
+        for key, value in request.data['changes'].items():
+            setattr(l, key, value)
+        l.save()
+        serializer = LinkSerializer()
+        return response.Response(serializer.to_representation(l))
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from fusion.service.models import (Category, Contact, Engagement, Partner, Comment, PartnerCategory)
+from fusion.service.models import (Category, Contact, Engagement, Link, Partner, Comment, PartnerCategory)
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -31,6 +31,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'text')
 
 
+class LinkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Link
+        fields = ('id', 'url', 'name', 'description')
+
+
 class PartnerCategorySerializer(serializers.ModelSerializer):
 
     category_id = serializers.CharField()
@@ -46,6 +53,7 @@ class PartnerSerializer(serializers.ModelSerializer):
     engagements = EngagementSerializer(many=True, required=False)
     comments = CommentSerializer(many=True, required=False)
     categories = PartnerCategorySerializer(many=True, required=False)
+    links = LinkSerializer(many=True, required=False)
 
     class Meta:
         model = Partner
@@ -63,7 +71,6 @@ class PartnerSerializer(serializers.ModelSerializer):
     def _save_partner(self, partner, validated_data):
         partner.name = validated_data.get('name', '')
         partner.summary = validated_data.get('summary', '')
-        partner.links = validated_data.get('links', '')
         partner.save()
 
         # Categories

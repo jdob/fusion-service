@@ -7,7 +7,6 @@ class Partner(models.Model):
     summary = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    links = models.TextField(null=True)  # comma-separated
     logo = models.TextField(null=True)  # base64
 
     def __str__(self):
@@ -71,3 +70,14 @@ class Comment(models.Model):
     
     def __str__(self):
         return self.text
+
+
+class Link(models.Model):
+
+    partner = models.ForeignKey(Partner, related_name='links', on_delete=models.CASCADE)
+    url = models.TextField()
+    name = models.CharField(max_length=256)
+    description = models.TextField(null=True)
+
+    def __str__(self):
+        return self.name
