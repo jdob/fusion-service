@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from fusion.service.models import (Category, Contact, Engagement, Link, Partner, Comment, PartnerCategory)
+from fusion.service.models import (Category, Comment, Contact, Engagement,
+                                   Link, Partner, PartnerCategory)
 
 
 class CategorySerializer(serializers.ModelSerializer):
