@@ -1,6 +1,6 @@
 from rest_framework import (decorators, response, viewsets)
 
-from .models import (Engagement, Partner, Comment, Category, PartnerCategory, Contact)
+from .models import (Engagement, Partner, Comment, Category, Contact)
 from .serializers import (EngagementSerializer, PartnerSerializer, CommentSerializer, CategorySerializer, ContactSerializer)
 
 
