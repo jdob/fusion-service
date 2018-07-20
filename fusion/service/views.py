@@ -1,8 +1,8 @@
 from rest_framework import (decorators, response, viewsets)
 
-from .models import (Engagement, Partner, Comment, Category, Contact, Link)
-from .serializers import (EngagementSerializer, PartnerSerializer, CommentSerializer,
-                          CategorySerializer, ContactSerializer, LinkSerializer)
+from .models import (Category, Comment, Contact, Engagement, Link, Partner)
+from .serializers import (CategorySerializer, CommentSerializer, ContactSerializer,
+                          EngagementSerializer, LinkSerializer, PartnerSerializer)
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -17,7 +17,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'POST':
             return self._create_engagement(request)
         elif self.request.method == 'DELETE':
-            return self._delete_engagement(request, engagement_id)
+            return self._delete_engagement(engagement_id)
         elif self.request.method == 'PATCH':
             return self._update_engagement(request, engagement_id)
 
@@ -33,11 +33,13 @@ class PartnerViewSet(viewsets.ModelViewSet):
 
         return response.Response(s.to_representation(e))
 
-    def _delete_engagement(self, request, engagement_id):
+    @staticmethod
+    def _delete_engagement(engagement_id):
         Engagement.objects.filter(id=engagement_id).delete()
         return response.Response({})
 
-    def _update_engagement(self, request, engagement_id):
+    @staticmethod
+    def _update_engagement(request, engagement_id):
         e = Engagement.objects.get(pk=engagement_id)
         for key,value in request.data['changes'].items():
             setattr(e, key, value)
@@ -48,15 +50,15 @@ class PartnerViewSet(viewsets.ModelViewSet):
     def comments(self, request, pk=None, comment_id=None):
 
         if self.request.method == 'GET':
-            return self._get_comments(request)
+            return self._get_comments()
         elif self.request.method == 'POST':
             return self._create_comment(request)
         elif self.request.method == 'DELETE':
-            return self._delete_comment(request, comment_id)
+            return self._delete_comment(comment_id)
         elif self.request.method == 'PATCH':
             return self._update_comment(request, comment_id)
 
-    def _get_comments(self, request):
+    def _get_comments(self):
         comments = Comment.objects.filter(partner=self.get_object())
         s = CommentSerializer(comments, many=True)
         return response.Response(s.data)
@@ -67,11 +69,13 @@ class PartnerViewSet(viewsets.ModelViewSet):
         e = s.create(request.data)
         return response.Response(s.to_representation(e))
 
-    def _delete_comment(self, request, comment_id):
+    @staticmethod
+    def _delete_comment(comment_id):
         Comment.objects.filter(id=comment_id).delete()
         return response.Response({})
 
-    def _update_comment(self, request, comment_id):
+    @staticmethod
+    def _update_comment(request, comment_id):
         Comment.objects.filter(id=comment_id).update(text=request.data['text'])
         return response.Response({})
 
@@ -83,7 +87,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'POST':
             return self._create_contact(request)
         elif self.request.method == 'DELETE':
-            return self._delete_contact(request, contact_id)
+            return self._delete_contact(contact_id)
         elif self.request.method == 'PATCH':
             return self._update_contact(request, contact_id)
 
@@ -99,11 +103,13 @@ class PartnerViewSet(viewsets.ModelViewSet):
 
         return response.Response(c.to_representation(e))
 
-    def _delete_contact(self, request, contact_id):
+    @staticmethod
+    def _delete_contact(contact_id):
         Contact.objects.filter(id=contact_id).delete()
         return response.Response({})
 
-    def _update_contact(self, request, contact_id):
+    @staticmethod
+    def _update_contact(request, contact_id):
         c = Contact.objects.get(pk=contact_id)
         for key,value in request.data['changes'].items():
             setattr(c, key, value)
@@ -117,32 +123,34 @@ class PartnerViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'POST':
             return self._create_link(request)
         elif self.request.method == 'DELETE':
-            return self._delete_link(request, link_id)
+            return self._delete_link(link_id)
         elif self.request.method == 'PATCH':
             return self._update_link(request, link_id)
 
     def _get_links(self):
         links = Link.objects.filter(partner=self.get_object())
-        l = LinkSerializer(links, many=True)
-        return response.Response(l.data)
+        ls = LinkSerializer(links, many=True)
+        return response.Response(ls.data)
 
     def _create_link(self, request):
-        l = LinkSerializer()
+        ls = LinkSerializer()
         request.data['partner'] = self.get_object()
-        e = l.create(request.data)
-        return response.Response(l.to_representation(e))
+        e = ls.create(request.data)
+        return response.Response(ls.to_representation(e))
 
-    def _delete_link(self, request, link_id):
+    @staticmethod
+    def _delete_link(link_id):
         Link.objects.filter(id=link_id).delete()
         return response.Response({})
 
-    def _update_link(self, request, link_id):
-        l = Link.objects.get(pk=link_id)
+    @staticmethod
+    def _update_link(request, link_id):
+        link = Link.objects.get(pk=link_id)
         for key, value in request.data['changes'].items():
-            setattr(l, key, value)
-        l.save()
+            setattr(link, key, value)
+        link.save()
         serializer = LinkSerializer()
-        return response.Response(serializer.to_representation(l))
+        return response.Response(serializer.to_representation(link))
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
