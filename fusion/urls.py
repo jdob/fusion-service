@@ -45,8 +45,7 @@ urlpatterns = [
     url(r'^partners/(?P<pk>[^/.]+)/engagements/(?P<engagement_id>[^/.]+)/$', engagements_view),
     url(r'^partners/(?P<pk>[^/.]+)/comments/(?P<comment_id>[^/.]+)/$', comments_view),
     url(r'^partners/(?P<pk>[^/.]+)/contacts/(?P<contact_id>[^/.]+)/$', contacts_view),
-    url(r'^partners/(?P<pk>[^/.]+)/links/(?P<link_id>[^/.]+)/$', 
-        links_view),
-    path('admin/', admin.site.urls),
+    url(r'^partners/(?P<pk>[^/.]+)/links/(?P<link_id>[^/.]+)/$', links_view),
+    path('fusion-admin/', admin.site.urls),
     url(r'^api-token-auth/', views.obtain_auth_token),
 ]
