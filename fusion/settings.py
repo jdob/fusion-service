@@ -25,7 +25,7 @@ SECRET_KEY = 'b$k3g_o)&7&z0wxk#-bzvjqk4u9ic^$x^cx&%sdwv0$8x4l=d!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'fusion-service.dobtech.io']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fusion-service.dobtech.io']
 
 
 # Application definition
