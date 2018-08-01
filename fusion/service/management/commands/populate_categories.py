@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from fusion.service.models import Category
 
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         for name, description in CATEGORIES:
             cat, created = Category.objects.get_or_create(name=name, description=description)
             if created:
-                print('  Adding category: %s' % name)
+                print('  Added category: %s' % name)
             else:
                 print('  Found category: %s' % name)
         print('Completed!')
