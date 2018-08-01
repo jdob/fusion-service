@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.core.management.base import BaseCommand
 
 from fusion.service.models import (Engagement, Category, Contact, Link, Partner, Comment, PartnerCategory)
@@ -24,6 +24,7 @@ class Command(BaseCommand):
                 print('Deleting categories and groups from the database...')
                 self._purge(Category)
                 self._purge(Group)
+                self._purge(User)
 
             print('Completed!')
 
