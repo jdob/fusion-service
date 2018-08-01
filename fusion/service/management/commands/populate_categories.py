@@ -1,8 +1,4 @@
-import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fusion.settings')
-import django
-django.setup()
-
+from django.core.management.base import BaseCommand, CommandError
 
 from fusion.service.models import Category
 
@@ -27,18 +23,15 @@ CATEGORIES = (
 )
 
 
-class CategoryPopulator(object):
+class Command(BaseCommand):
+    help = 'Adds the standard categories to the database'
 
-    @staticmethod
-    def add_categories():
+    def handle(self, *args, **options):
         print('Populating categories...')
         for name, description in CATEGORIES:
-            print('  Adding category: %s' % name)
-            c = Category(name=name, description=description)
-            c.save()
+            cat, created = Category.objects.get_or_create(name=name, description=description)
+            if created:
+                print('  Adding category: %s' % name)
+            else:
+                print('  Found category: %s' % name)
         print('Completed!')
-
-
-if __name__ == '__main__':
-    populator = CategoryPopulator()
-    populator.add_categories()
