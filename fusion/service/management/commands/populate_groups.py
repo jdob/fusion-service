@@ -26,7 +26,7 @@ EDITOR_CODENAMES = (
 
 
 class Command(BaseCommand):
-    help = 'Adds the standard categories to the database'
+    help = 'Adds the standard groups to the database'
 
     def handle(self, *args, **options):
         print('Populating groups...')
