@@ -27,11 +27,15 @@ class Command(BaseCommand):
     help = 'Adds the standard categories to the database'
 
     def handle(self, *args, **options):
-        print('Populating categories...')
-        for name, description in CATEGORIES:
-            cat, created = Category.objects.get_or_create(name=name, description=description)
-            if created:
-                print('  Added category: %s' % name)
-            else:
-                print('  Found category: %s' % name)
-        print('Completed!')
+        populate_categories()
+
+
+def populate_categories():
+    print('Populating categories...')
+    for name, description in CATEGORIES:
+        cat, created = Category.objects.get_or_create(name=name, description=description)
+        if created:
+            print('  Added category: %s' % name)
+        else:
+            print('  Found category: %s' % name)
+    print('Completed!')

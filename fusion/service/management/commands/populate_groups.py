@@ -29,26 +29,30 @@ class Command(BaseCommand):
     help = 'Adds the standard groups to the database'
 
     def handle(self, *args, **options):
-        print('Populating groups...')
-        g, created = Group.objects.get_or_create(
-            name='Editors'
-        )
+        populate_groups()
 
-        if created:
-            for c in EDITOR_CODENAMES:
-                permission = Permission.objects.get(codename=c)
-                g.permissions.add(permission)
-            g.save()
-            print('  Added group: Editors')
-        else:
-            print('  Found group: Editors')
 
-        g, created = Group.objects.get_or_create(
-            name='Read Only'
-        )
-        if created:
-            print('  Added group: Read Only')
-        else:
-            print('  Found group: Read Only')
+def populate_groups():
+    print('Populating groups...')
+    g, created = Group.objects.get_or_create(
+        name='Editors'
+    )
 
-        print('Completed!')
+    if created:
+        for c in EDITOR_CODENAMES:
+            permission = Permission.objects.get(codename=c)
+            g.permissions.add(permission)
+        g.save()
+        print('  Added group: Editors')
+    else:
+        print('  Found group: Editors')
+
+    g, created = Group.objects.get_or_create(
+        name='Read Only'
+    )
+    if created:
+        print('  Added group: Read Only')
+    else:
+        print('  Found group: Read Only')
+
+    print('Completed!')
