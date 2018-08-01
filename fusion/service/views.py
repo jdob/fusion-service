@@ -1,4 +1,8 @@
-from rest_framework import (decorators, response, viewsets)
+from django.contrib.auth.models import Group, User
+from rest_framework import (decorators, parsers, renderers, response, viewsets)
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.views import APIView
 
 from .models import (Category, Comment, Contact, Engagement, Link, Partner)
 from .serializers import (CategorySerializer, CommentSerializer, ContactSerializer,
@@ -157,3 +161,35 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
+class FusionAuthView(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+
+        # Load the token
+        token, created = Token.objects.get_or_create(user=user)
+
+        # Look up the user's groups
+        # user_groups = Group.objects.get(user=user)
+
+        group_names = [g.name for g in user.groups.all()]
+
+        response_data = {
+            'token': token.key,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'groups': group_names,
+            'is_superuser': user.is_superuser,
+        }
+
+        return response.Response(response_data)

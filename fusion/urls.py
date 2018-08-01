@@ -18,9 +18,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
-from rest_framework.authtoken import views
+# from rest_framework.authtoken import views
 
-from fusion.service.views import (CategoryViewSet, PartnerViewSet)
+from fusion.service.views import (CategoryViewSet, PartnerViewSet, FusionAuthView)
 
 
 router = routers.DefaultRouter()
@@ -47,5 +47,5 @@ urlpatterns = [
     url(r'^partners/(?P<pk>[^/.]+)/contacts/(?P<contact_id>[^/.]+)/$', contacts_view),
     url(r'^partners/(?P<pk>[^/.]+)/links/(?P<link_id>[^/.]+)/$', links_view),
     path('fusion-admin/', admin.site.urls),
-    url(r'^api-token-auth/', views.obtain_auth_token),
+    url(r'^api-token-auth/', FusionAuthView.as_view()),
 ]
