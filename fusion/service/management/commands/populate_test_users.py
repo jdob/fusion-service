@@ -18,6 +18,7 @@ def populate_test_users():
         first_name='Leonard',
         last_name='Hofstadter',
         is_superuser=True,
+        is_staff=True,
     )
     u.set_password('admin')
     u.save()
