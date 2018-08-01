@@ -15,9 +15,10 @@ def populate_test_users():
     # Admin
     u, created = User.objects.get_or_create(
         username='admin',
-        password='admin',
-        is_superuser=True
+        is_superuser=True,
     )
+    u.set_password('admin')
+    u.save()
     if created:
         print('  Added admin')
     else:
@@ -26,8 +27,9 @@ def populate_test_users():
     # Read Only Users
     u, created = User.objects.get_or_create(
         username='readonly1',
-        password='readonly1',
     )
+    u.set_password('readonly1')
+    u.save()
     if created:
         readonly = Group.objects.get(name='Read Only')
         readonly.user_set.add(u)
@@ -38,8 +40,9 @@ def populate_test_users():
     # Editors
     u, created = User.objects.get_or_create(
         username='editor1',
-        password='editor1'
     )
+    u.set_password('editor1')
+    u.save()
     if created:
         editors = Group.objects.get(name='Editors')
         editors.user_set.add(u)
