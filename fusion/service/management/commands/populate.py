@@ -10,4 +10,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         populate_categories()
         populate_groups()
-        
