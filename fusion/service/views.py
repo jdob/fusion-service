@@ -1,4 +1,3 @@
-from django.contrib.auth.models import Group, User
 from rest_framework import (decorators, parsers, renderers, response, viewsets)
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -179,10 +178,9 @@ class FusionAuthView(APIView):
         token, created = Token.objects.get_or_create(user=user)
 
         # Look up the user's groups
-        # user_groups = Group.objects.get(user=user)
-
         group_names = [g.name for g in user.groups.all()]
 
+        # Package up for the caller
         response_data = {
             'token': token.key,
             'username': user.username,
