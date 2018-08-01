@@ -44,7 +44,7 @@ class Command(BaseCommand):
             pc.save()
 
         # Links
-        for l_data in partner['links']:
+        for l_data in partner.get('links', []):
             link = Link(
                 name=l_data['name'],
                 url=l_data['url'],
@@ -54,7 +54,7 @@ class Command(BaseCommand):
             link.save()
 
         # Comments
-        for c_data in partner['comments']:
+        for c_data in partner.get('comments', []):
             comment = Comment(
                 text=c_data
             )
@@ -62,18 +62,18 @@ class Command(BaseCommand):
             comment.save()
 
         # Contacts
-        for c_data in partner['contacts']:
+        for c_data in partner.get('contacts', []):
             contact = Contact(
                 name=c_data['name'],
-                email=c_data['email'],
-                role=c_data['role'],
-                notes=c_data['notes'],
+                email=c_data.get('email', None),
+                role=c_data.get('role', None),
+                notes=c_data.get('notes', None),
             )
             contact.partner = p
             contact.save()
 
         # Engagements
-        for e_data in partner['engagements']:
+        for e_data in partner.get('engagements', []):
             engagement = Engagement(
                 notes=e_data['notes'],
                 location=e_data['location'],
