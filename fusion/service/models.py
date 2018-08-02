@@ -3,7 +3,7 @@ from django.db import models
 
 class Partner(models.Model):
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
     summary = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -15,7 +15,7 @@ class Partner(models.Model):
 
 class Category(models.Model):
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
     description = models.CharField(max_length=256)
 
     class Meta:
@@ -55,7 +55,7 @@ class Contact(models.Model):
     partner = models.ForeignKey(Partner, related_name='contacts', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=256)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=256, null=True)
     notes = models.TextField(null=True)
 
@@ -78,6 +78,9 @@ class Link(models.Model):
     url = models.TextField()
     name = models.CharField(max_length=256)
     description = models.TextField(null=True)
+
+    class Meta:
+        unique_together = ('partner', 'url')
 
     def __str__(self):
         return self.name
