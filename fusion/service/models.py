@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime 
 
 class Partner(models.Model):
 
@@ -46,7 +46,7 @@ class Engagement(models.Model):
 
     notes = models.TextField()
     location = models.CharField(max_length=256, null=True)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(default=datetime.date.today)
     attendees = models.TextField(null=True)  # comma-separated
 
 
