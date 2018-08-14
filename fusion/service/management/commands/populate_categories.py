@@ -20,6 +20,8 @@ CATEGORIES = (
      'Data Stores, Volume Plugins, Backup, Big Data'),
     ('Middleware',
      'Messaging, BPM, Integration'),
+    ('Machine Learning',
+     'Data Science, Data Mining, Artificial Intelligence'),
 )
 
 
