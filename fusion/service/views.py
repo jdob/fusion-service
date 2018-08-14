@@ -3,9 +3,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.views import APIView
 
-from .models import (Category, Comment, Contact, Engagement, Link, Partner)
+from .models import (Category, Comment, Contact, Engagement, Link, Partner, Task)
 from .serializers import (CategorySerializer, CommentSerializer, ContactSerializer,
-                          EngagementSerializer, LinkSerializer, PartnerSerializer)
+                          EngagementSerializer, LinkSerializer, PartnerSerializer,
+                          TaskSerializer)
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -154,6 +155,43 @@ class PartnerViewSet(viewsets.ModelViewSet):
         link.save()
         serializer = LinkSerializer()
         return response.Response(serializer.to_representation(link))
+
+    @decorators.detail_route(methods=['get', 'post', 'delete', 'patch'], url_path='tasks')
+    def tasks(self, request, pk=None, task_id=None):
+
+        if self.request.method == 'GET':
+            return self._get_tasks()
+        elif self.request.method == 'POST':
+            return self._create_task(request)
+        elif self.request.method == 'DELETE':
+            return self._delete_task(task_id)
+        elif self.request.method == 'PATCH':
+            return self._update_task(request, task_id)
+
+    def _get_tasks(self):
+        tasks = Task.objects.filter(partner=self.get_object())
+        t = TaskSerializer(tasks, many=True)
+        return response.Response(t.data)
+
+    def _create_task(self, request):
+        t = TaskSerializer()
+        request.data['partner'] = self.get_object()
+        e = t.create(request.data)
+        return response.Response(t.to_representation(e))
+
+    @staticmethod
+    def _delete_task(task_id):
+        Task.objects.filter(id=task_id).delete()
+        return response.Response({})
+
+    @staticmethod
+    def _update_task(request, task_id):
+        task = Task.objects.get(pk=task_id)
+        for key, value in request.data['changes'].items():
+            setattr(task, key, value)
+        task.save()
+        serializer = TaskSerializer()
+        return response.Response(serializer.to_representation(task))
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

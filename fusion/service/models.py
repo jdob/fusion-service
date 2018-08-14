@@ -84,3 +84,16 @@ class Link(models.Model):
 
     def __str__(self):
         return self.name
+
+# completed can have only 3 values 
+# 0 - not completed
+# 1 - completed
+# 2 - archived
+class Task(models.Model):
+
+    partner = models.ForeignKey(Partner, related_name='tasks', on_delete=models.CASCADE)
+    text = models.CharField(max_length=256, null=True)
+    completed = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return self.text

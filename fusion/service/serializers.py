@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from fusion.service.models import (Category, Comment, Contact, Engagement,
-                                   Link, Partner, PartnerCategory)
+                                   Link, Partner, PartnerCategory, Task)
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -48,6 +48,12 @@ class PartnerCategorySerializer(serializers.ModelSerializer):
         model = PartnerCategory
         fields = ('category_id', 'name')
 
+class TaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = ('id', 'completed', 'text')
+
 
 class PartnerSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True, required=False)
@@ -55,8 +61,10 @@ class PartnerSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, required=False)
     categories = PartnerCategorySerializer(many=True, required=False)
     links = LinkSerializer(many=True, required=False)
+    tasks = TaskSerializer(many=True, required=False)
 
     class Meta:
         model = Partner
         fields = ('id', 'name', 'summary', 'logo', 'created', 'updated', 'links',
-                  'contacts', 'engagements', 'comments', 'categories')
+                  'contacts', 'engagements', 'comments', 'categories', 'tasks')
+
