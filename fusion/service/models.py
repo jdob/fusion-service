@@ -1,9 +1,10 @@
 from django.db import models
 import datetime 
 
+
 class Partner(models.Model):
 
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     summary = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -15,8 +16,8 @@ class Partner(models.Model):
 
 class Category(models.Model):
 
-    name = models.CharField(max_length=256, unique=True)
-    description = models.CharField(max_length=256)
+    name = models.CharField(max_length=255, unique=True)
+    description = models.CharField(max_length=255)
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -45,7 +46,7 @@ class Engagement(models.Model):
     partner = models.ForeignKey(Partner, related_name='engagements', on_delete=models.CASCADE)
 
     notes = models.TextField()
-    location = models.CharField(max_length=256, null=True)
+    location = models.CharField(max_length=255, null=True)
     timestamp = models.DateTimeField(default=datetime.date.today)
     attendees = models.TextField(null=True)  # comma-separated
 
@@ -54,9 +55,9 @@ class Contact(models.Model):
 
     partner = models.ForeignKey(Partner, related_name='contacts', on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=256, null=True)
+    role = models.CharField(max_length=255, null=True)
     notes = models.TextField(null=True)
 
     def __str__(self):
@@ -66,7 +67,7 @@ class Contact(models.Model):
 class Comment(models.Model):
 
     partner = models.ForeignKey(Partner, related_name='comments', on_delete=models.CASCADE)
-    text = models.CharField(max_length=256, null=True)
+    text = models.CharField(max_length=255, null=True)
     
     def __str__(self):
         return self.text
@@ -75,24 +76,18 @@ class Comment(models.Model):
 class Link(models.Model):
 
     partner = models.ForeignKey(Partner, related_name='links', on_delete=models.CASCADE)
-    url = models.TextField()
-    name = models.CharField(max_length=256)
+    url = models.TextField(max_length=1023)
+    name = models.CharField(max_length=255)
     description = models.TextField(null=True)
-
-    class Meta:
-        unique_together = ('partner', 'url')
 
     def __str__(self):
         return self.name
 
-# completed can have only 3 values 
-# 0 - not completed
-# 1 - completed
-# 2 - archived
+
 class Task(models.Model):
 
     partner = models.ForeignKey(Partner, related_name='tasks', on_delete=models.CASCADE)
-    text = models.CharField(max_length=256, null=True)
+    text = models.CharField(max_length=255, null=True)
     completed = models.IntegerField(default=0)
     
     def __str__(self):
